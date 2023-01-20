@@ -7,3 +7,9 @@
 html {
   font-family: 'Open Sans', sans-serif;
 }
+.center{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
