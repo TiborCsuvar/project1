@@ -8,7 +8,7 @@ export default function Users() {
     {
       id: 1,
       name: 'Joe Kort',
-      image: 'https://unsplash.com/photos/Xbf_4e7YDII',
+      image: '/cat.jpg',
       places: 4
     }
   ];
