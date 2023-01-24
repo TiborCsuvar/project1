@@ -16,7 +16,7 @@ export default function SideDrawer(props) {
       unmountOnExit
     >
       <aside
-        className="side-drawer">{props.children}
+        className="side-drawer" onClick={props.onClick}>{props.children}
       </aside>
 
     </CSSTransition>
