@@ -38,7 +38,7 @@ export default function PlaceItem(props) {
             <p>{props.description}</p>
           </div>
           <div className="place-item__actions">
-            <Button inverse onClick={openMapHandler}>VIiew on map</Button>
+            <Button inverse onClick={openMapHandler}>View on map</Button>
             <Button to={`/places/${props.id}`}>Edit</Button>
             <Button danger>Delete</Button>
           </div>
