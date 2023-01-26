@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import PlaceList from "../components/PlaceList";
 
 const DUMMY_PLACES = [{
-  id: '1',
+  id: 'p1',
   title: 'Halászbástya',
   description: 'A fortress from the XIX. century.',
   imageUrl: '/halaszbastya.jfif',
@@ -16,7 +16,7 @@ const DUMMY_PLACES = [{
   }
 },
 {
-  id: '2',
+  id: 'p2',
   title: 'Halászbástya',
   description: 'A fortress from the XIX. century.',
   imageUrl: '/halaszbastya.jfif',

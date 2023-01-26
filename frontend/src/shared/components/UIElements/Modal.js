@@ -29,7 +29,7 @@ function ModalOverlay(props) {
 export default function Modal(props) {
   const nodeRef = React.useRef(null);
 
-  return <React.Fragment>
+  return (<React.Fragment>
     {props.show && <BackDrop onClick={props.OnCancel} />}
     <CSSTransition
       in={props.show}
@@ -42,4 +42,5 @@ export default function Modal(props) {
       <ModalOverlay {...props} />
     </CSSTransition>
   </React.Fragment>
+  );
 }
