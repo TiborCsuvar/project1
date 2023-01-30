@@ -20,6 +20,29 @@ export default function App() {
     setIsLoggedIn(false);
   }, []);
 
+  let routes;
+
+  if (isLoggedIn) {
+    routes = (
+      <React.Fragment>
+        <Route path='/' exact="true" element={< Users />} />
+        <Route path='/:userId/places' exact="true" element={<UserPlaces />} />
+        <Route path='/places/new' exact="true" element={<NewPlace />} />
+        <Route path='/places/:placeId' element={<UpdatePlace />} />
+        <Route path='*' element={<Navigate to='/' />} />
+      </React.Fragment>
+    );
+  } else {
+    routes = (
+      <React.Fragment>
+        <Route path='/' exact="true" element={< Users />} />
+        <Route path='/:userId/places' exact="true" element={<UserPlaces />} />
+        <Route path="auth" exact="true" element={<Auth />} />
+        <Route path='*' element={<Navigate to='/auth' />} />
+      </React.Fragment>
+    );
+  }
+
   return (
     <AuthContect.Provider value={{
       isLoggedIn: isLoggedIn,
@@ -30,12 +53,7 @@ export default function App() {
         <MainNavigation />
         <main>
           <Routes>
-            <Route path='/' exact="true" element={< Users />} />
-            <Route path='/:userId/places' exact="true" element={<UserPlaces />} />
-            <Route path='/places/new' exact="true" element={<NewPlace />} />
-            <Route path='/places/:placeId' exact="true" element={<UpdatePlace />} />
-            <Route path="auth" exact="true" element={<Auth />} />
-            <Route path='*' element={<Navigate to='/' />} />
+            {routes}
           </Routes>
         </main>
       </Router >
