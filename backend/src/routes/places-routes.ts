@@ -17,10 +17,18 @@ const DUMMY_PLACES = [
 }
 ];
 
-export default router.get('/:pId',(req,res,)=>{
-const placeId=req.params.pId;
-const response=DUMMY_PLACES.find(p=>{
-  return p.id===placeId
+export default router.get('/user/:uId',(req,res)=>{
+const userId=req.params.uId;
+const response=DUMMY_PLACES.find(user=>{
+  return user.creator===userId;
 });
-res.json({response});
+res.status(200).json(response);
+});
+
+router.get('/:pId',(req,res,)=>{
+const placeId=req.params.pId;
+const response=DUMMY_PLACES.find(place=>{
+  return place.id===placeId
+});
+res.status(200).json(response);
 });
