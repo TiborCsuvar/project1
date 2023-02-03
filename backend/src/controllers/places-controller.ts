@@ -1,6 +1,8 @@
+import { v4 as uuidv4 } from "uuid";
+
 import HttpError from "../models/http-error";
 
-const DUMMY_PLACES = [
+const DUMMY_PLACES: any = [
   {
     id: "p1",
     title: "Halászbástya",
@@ -37,4 +39,21 @@ export const getPlaceByUserId = (req, res) => {
   }
 
   res.status(200).json(response);
+};
+
+export const createPlace = (req, res) => {
+  const { title, description, coordinates, address, creator } = req.body;
+
+  const createdPlace = {
+    id: uuidv4(),
+    title: title,
+    description: description,
+    location: coordinates,
+    address: address,
+    creator: creator,
+  };
+
+  DUMMY_PLACES.push(createdPlace);
+
+  res.status(201).json(createdPlace);
 };
