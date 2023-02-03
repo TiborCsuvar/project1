@@ -5,7 +5,7 @@ import {
   getPlaceByUserId,
   createPlace,
   updatePlaceById,
-  // deletePlaceById,
+  deletePlaceById,
 } from "../controllers/places-controller";
 
 const router = express.Router();
@@ -18,4 +18,4 @@ router.post("/", createPlace);
 
 router.patch("/:pId", updatePlaceById);
 
-//router.delete("/:pId", deletePlaceById);
+router.delete("/:pId", deletePlaceById);

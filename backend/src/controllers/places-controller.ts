@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import HttpError from "../models/http-error";
 
-const DUMMY_PLACES: any = [
+let DUMMY_PLACES: any = [
   {
     id: "p1",
     title: "Halászbástya",
@@ -72,4 +72,10 @@ export const updatePlaceById = (req, res) => {
   res.status(200).json(updatedPlace);
 };
 
-//export const deletePlaceById = (req, res) => {};
+export const deletePlaceById = (req, res) => {
+  const placeId = req.params.pId;
+
+  DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+
+  res.status(200).json({ message: `Deleted place with id: ${placeId}` });
+};
