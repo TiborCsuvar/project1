@@ -2,6 +2,7 @@ import express from "express";
 import config from "../config";
 
 import placesRoutes from "./routes/places-routes";
+import usersRoutes from "./routes/users-routes";
 import HttpError from "./models/http-error";
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 const PORT = config.port || 8081;
 
 app.use("/api/places", placesRoutes);
+app.use("/api/users", usersRoutes);
 
 app.use((req, res) => {
   throw new HttpError("Could not find this route", 404);
