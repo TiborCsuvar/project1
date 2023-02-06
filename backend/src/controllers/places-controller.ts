@@ -66,6 +66,12 @@ export const createPlace = (req, res) => {
 };
 
 export const updatePlaceById = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new HttpError("Invalid inputs, please check your data.", 422);
+  }
+
   const { title, description } = req.body;
   const placeId = req.params.pId;
 
