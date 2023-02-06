@@ -1,4 +1,5 @@
 import express from "express";
+import { check } from "express-validator";
 
 import {
   getPlaceById,
@@ -14,7 +15,16 @@ export default router.get("/user/:uId", getPlaceById);
 
 router.get("/:pId", getPlacesByUserId);
 
-router.post("/", createPlace);
+router.post(
+  "/",
+  [
+    check("title").notEmpty(),
+    check("description").isLength({ min: 5 }),
+    check("address").notEmpty(),
+    check("creator").notEmpty(),
+  ],
+  createPlace
+);
 
 router.patch("/:pId", updatePlaceById);
 

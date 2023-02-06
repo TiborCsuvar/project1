@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { validationResult } from "express-validator";
 
 import HttpError from "../models/http-error";
 
@@ -42,6 +43,12 @@ export const getPlacesByUserId = (req, res) => {
 };
 
 export const createPlace = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new HttpError("Invalid inputs, please check your data.", 422);
+  }
+
   const { title, description, coordinates, address, creator } = req.body;
 
   const createdPlace = {
