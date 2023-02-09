@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 
 import HttpError from "../models/http-error";
 import getCoordinatesForAddress from "../util/location";
+import { Place } from "../models/place-schema";
 
 let DUMMY_PLACES: any = [
   {
@@ -59,17 +60,20 @@ export const createPlace = async (req, res, next) => {
     return next(error);
   }
 
-  const createdPlace = {
-    id: uuidv4(),
+  const createdPlace = new Place({
     title: title,
     description: description,
-    location: coordinates,
     address: address,
+    location: coordinates,
+    image: "https://en.wikipedia.org/wiki/File:June_odd-eyed-cat.jpg",
     creator: creator,
-  };
+  });
 
-  DUMMY_PLACES.push(createdPlace);
-
+  try {
+    await createdPlace.save();
+  } catch (error) {
+    return next(new HttpError("Creating place failed, please try again.", 500));
+  }
   res.status(201).json(createdPlace);
 };
 
