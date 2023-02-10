@@ -66,7 +66,7 @@ export const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    next(new HttpError("Invalid inputs, please check your data.", 422));
+    return next(new HttpError("Invalid inputs, please check your data.", 422));
   }
 
   const { title, description, address, creator } = req.body;
@@ -95,24 +95,35 @@ export const createPlace = async (req, res, next) => {
   res.status(201).json(createdPlace);
 };
 
-export const updatePlaceById = (req, res) => {
+export const updatePlaceById = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid inputs, please check your data.", 422);
+    return next(new HttpError("Invalid inputs, please check your data.", 422));
   }
 
   const { title, description } = req.body;
   const placeId = req.params.pId;
 
-  const updatedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
-  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  let updatedPlace;
+  try {
+    updatedPlace = await Place.findById(placeId);
+  } catch (error) {
+    return next(new HttpError("Could not update.", 500));
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
 
-  DUMMY_PLACES[placeIndex] = updatedPlace;
+  try {
+    await updatedPlace.save();
+  } catch (error) {
+    return next(new HttpError("Could not update place", 500));
+  }
 
-  res.status(200).json(updatedPlace);
+  const response = updatedPlace.toObject({ getters: true });
+
+  res.status(200).json(response);
 };
 
 export const deletePlaceById = (req, res) => {
