@@ -35,20 +35,31 @@ export const getPlaceById = async (req, res, next) => {
       new HttpError("Could not find a place for the provided ID.", 404)
     );
   }
+  const response = foundPlace.toObject({ getters: true });
 
-  res.status(200).json(foundPlace.toObject({ getters: true }));
+  res.status(200).json(response);
 };
 
-export const getPlacesByUserId = (req, res) => {
-  const placeId = req.params.pId;
-  const places = DUMMY_PLACES.filter((place) => {
-    return place.id === placeId;
-  });
-  if (places.length === 0) {
-    throw new HttpError("Could not find places for the provided ID.", 404);
+export const getPlacesByUserId = async (req, res, next) => {
+  const userId = req.params.uId;
+
+  let foundPlaces;
+  try {
+    foundPlaces = await Place.find({ creator: userId });
+  } catch (error) {
+    return next(new HttpError("Request failed, try again later.", 500));
   }
 
-  res.status(200).json(places);
+  if (!foundPlaces || foundPlaces.length === 0) {
+    return next(
+      new HttpError("Could not find places for the provided ID.", 404)
+    );
+  }
+  const response = foundPlaces.map((place) =>
+    place.toObject({ getters: true })
+  );
+
+  res.status(200).json(response);
 };
 
 export const createPlace = async (req, res, next) => {
