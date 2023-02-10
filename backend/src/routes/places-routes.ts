@@ -11,9 +11,9 @@ import {
 
 const router = express.Router();
 
-export default router.get("/user/:uId", getPlaceById);
+export default router.get("/user/:uId", getPlacesByUserId);
 
-router.get("/:pId", getPlacesByUserId);
+router.get("/:pId", getPlaceById);
 
 router.post(
   "/",
