@@ -49,7 +49,7 @@ export const signupUser = async (req, res, next) => {
     return next(new HttpError("Invalid inputs, check your data", 422));
   }
 
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
   try {
@@ -67,7 +67,7 @@ export const signupUser = async (req, res, next) => {
     email: email,
     password: password,
     image: "https://en.wikipedia.org/wiki/File:June_odd-eyed-cat.jpg",
-    places: places,
+    places: [],
   });
 
   try {
