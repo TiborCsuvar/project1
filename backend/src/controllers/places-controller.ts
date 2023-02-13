@@ -1,24 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
 import { validationResult } from "express-validator";
+import mongoose from "mongoose";
 
 import HttpError from "../models/http-error";
 import getCoordinatesForAddress from "../util/location";
 import { Place } from "../models/place-schema";
-
-let DUMMY_PLACES: any = [
-  {
-    id: "p1",
-    title: "Halászbástya",
-    description: "A fortress from the XIX. century.",
-    imageUrl: "/halaszbastya.jfif",
-    address: "Budapest, Szentháromság tér, 1014",
-    creator: "u1",
-    location: {
-      lat: 47.5021827,
-      lng: 19.0325925,
-    },
-  },
-];
+import { User } from "../models/user-schema";
 
 export const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pId;
@@ -87,8 +73,25 @@ export const createPlace = async (req, res, next) => {
     creator: creator,
   });
 
+  let user;
+
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
+  } catch (error) {
+    return next(new HttpError("Creating place failed, please try again.", 500));
+  }
+
+  if (!user) {
+    return next(new HttpError("Could not find user for provided ID.", 404));
+  }
+
+  try {
+    const createPlaceSession = await mongoose.startSession();
+    createPlaceSession.startTransaction();
+    await createdPlace.save({ session: createPlaceSession });
+    user.places.push(createdPlace);
+    await user.save({ session: createPlaceSession });
+    await createPlaceSession.commitTransaction();
   } catch (error) {
     return next(new HttpError("Creating place failed, please try again.", 500));
   }
