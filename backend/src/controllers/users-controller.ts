@@ -12,15 +12,16 @@ let DUMMY_USERS: any = [
   },
 ];
 
-export const getUsers = (req, res) => {
-  const allUsers = DUMMY_USERS.map((user) => {
-    return user;
-  });
-  if (!allUsers || allUsers.length === 0) {
-    throw new HttpError("Could not find any user.", 404);
+export const getUsers = async (req, res, next) => {
+  let allUsers;
+  try {
+    allUsers = await User.find({}, "email name");
+  } catch (error) {
+    return next(new HttpError("Could not find any users", 500));
   }
+  const response = allUsers.map((user) => user.toObject({ getters: true }));
 
-  res.status(200).json(allUsers);
+  res.status(200).json(response);
 };
 
 export const loginUser = async (req, res, next) => {
