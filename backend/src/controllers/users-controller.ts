@@ -23,13 +23,19 @@ export const getUsers = (req, res) => {
   res.status(200).json(allUsers);
 };
 
-export const loginUser = (req, res) => {
+export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
+  let existingUser;
 
-  if (!identifiedUser || identifiedUser.password !== password) {
-    throw new HttpError("E-mail address and/or password are wrong.", 401);
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (error) {
+    return next(new HttpError("Logging in failed. Try again.", 500));
+  }
+
+  if (!existingUser || existingUser.password !== password) {
+    return next(new HttpError("Invalid credentials.", 401));
   }
 
   res.json({ message: "Logged in." });
@@ -45,8 +51,8 @@ export const signupUser = async (req, res, next) => {
   const { name, email, password, places } = req.body;
 
   let existingUser;
-  existingUser = await User.findOne({ email: email });
   try {
+    existingUser = await User.findOne({ email: email });
   } catch (error) {
     return next(new HttpError("Signing up failed. Try again.", 500));
   }
