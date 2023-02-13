@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
 import { validationResult } from "express-validator";
 
 import HttpError from "../models/http-error";
+import { User } from "../models/user-schema";
 
 let DUMMY_USERS: any = [
   {
@@ -35,28 +35,40 @@ export const loginUser = (req, res) => {
   res.json({ message: "Logged in." });
 };
 
-export const signupUser = (req, res) => {
+export const signupUser = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid inputs, check your data", 422);
+    return next(new HttpError("Invalid inputs, check your data", 422));
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, places } = req.body;
 
-  const haUser = DUMMY_USERS.find((u) => u.email === email);
-  if (haUser) {
-    throw new HttpError("E-mail address is already exist.", 422);
+  let existingUser;
+  existingUser = await User.findOne({ email: email });
+  try {
+  } catch (error) {
+    return next(new HttpError("Signing up failed. Try again.", 500));
   }
 
-  const createdUser = {
-    id: uuidv4(),
+  if (existingUser) {
+    return next(new HttpError("User already exist.", 422));
+  }
+
+  const createdUser = new User({
     name: name,
     email: email,
     password: password,
-  };
+    image: "https://en.wikipedia.org/wiki/File:June_odd-eyed-cat.jpg",
+    places: places,
+  });
 
-  DUMMY_USERS.push(createdUser);
+  try {
+    await createdUser.save();
+  } catch (error) {
+    return next(new HttpError("Signing up failed.", 500));
+  }
 
-  res.status(201).json(createdUser);
+  const response = createdUser.toObject({ getters: true });
+  res.status(201).json(response);
 };
