@@ -3,15 +3,6 @@ import { validationResult } from "express-validator";
 import HttpError from "../models/http-error";
 import { User } from "../models/user-schema";
 
-let DUMMY_USERS: any = [
-  {
-    id: "u1",
-    name: "Test",
-    password: "test",
-    email: "test@test.com",
-  },
-];
-
 export const getUsers = async (req, res, next) => {
   let allUsers;
   try {
