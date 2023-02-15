@@ -52,9 +52,54 @@ export default function Auth() {
     setIsLoginMode(prevMode => !prevMode);
   };
 
-  const authSubmitHandler = event => {
+  const authSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs);
+
+    if (isLoginMode) {
+      try {
+        const response = await fetch("http://localhost:3005/api/users/signup", {
+          method: "POST",
+          header: {
+            "Content-Type": "application/json"
+          }
+          ,
+          body: JSON.stringify({
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value
+          })
+        }
+        );
+        const responseData = await response.json();
+
+        console.log(responseData);
+      } catch (error) {
+        console.log(error);
+      }
+
+    }/* else {
+      try {
+        const response = await fetch("http://localhost:3005/api/users/login", {
+          method: "POST",
+          header: {
+            "Content-Type": "application/json"
+          },
+          body: {
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value
+          }
+        });
+        const responseData = await response.json();
+
+        console.log(responseData);
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+*/
+
+
     auth.login();
   };
 
