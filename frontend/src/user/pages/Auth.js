@@ -56,10 +56,12 @@ export default function Auth() {
     event.preventDefault();
 
     if (isLoginMode) {
+
+    } else {
       try {
         const response = await fetch("http://localhost:3005/api/users/signup", {
           method: "POST",
-          header: {
+          headers: {
             "Content-Type": "application/json"
           }
           ,

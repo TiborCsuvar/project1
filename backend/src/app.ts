@@ -14,6 +14,15 @@ const PORT = config.port || 8081;
 const DATABASE_USERNAME = config.database_username;
 const DATABASE_PASSWORD = config.database_password;
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Acces-Control-Allow-Method", "GET, POST, PATCH, DELETE");
+  next();
+});
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
