@@ -6,13 +6,14 @@ import { User } from "../models/user-schema";
 export const getUsers = async (req, res, next) => {
   let allUsers;
   try {
-    allUsers = await User.find({}, "email name");
+    allUsers = await User.find({}, "-password");
   } catch (error) {
     return next(new HttpError("Could not find any users", 500));
   }
-  const response = allUsers.map((user) => user.toObject({ getters: true }));
 
-  res.status(200).json(response);
+  res
+    .status(200)
+    .json({ users: allUsers.map((user) => user.toObject({ getters: true })) });
 };
 
 export const loginUser = async (req, res, next) => {

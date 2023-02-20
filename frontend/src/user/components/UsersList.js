@@ -5,8 +5,8 @@ import UserItem from "./UserItem";
 
 import './UsersList.css';
 
-export default function UsersList({ usersDummyArray }) {
-  if (usersDummyArray.length === 0) {
+export default function UsersList(props) {
+  if (props.items.length === 0) {
     return (
       <div className="center">
         <Card>
@@ -15,17 +15,19 @@ export default function UsersList({ usersDummyArray }) {
       </div>
     );
   }
+
   return (
     <ul className="users-list">
-      {usersDummyArray.map(user => {
-        return <UserItem
+      {props.items.map(user => (
+        <UserItem
           key={user.id}
           id={user.id}
           image={user.image}
           name={user.name}
           placeCount={user.places.length}
-        />;
-      })}
+        />
+      ))}
     </ul>
   );
+
 }
