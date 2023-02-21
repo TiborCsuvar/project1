@@ -23,7 +23,7 @@ export const getPlaceById = async (req, res, next) => {
   }
   const response = foundPlace.toObject({ getters: true });
 
-  res.status(200).json({ places: response });
+  res.status(200).json({ place: response });
 };
 
 export const getPlacesByUserId = async (req, res, next) => {
@@ -31,17 +31,17 @@ export const getPlacesByUserId = async (req, res, next) => {
 
   let foundPlaces;
   try {
-    foundPlaces = await Place.find({ creator: userId });
+    foundPlaces = await User.findById(userId).populate("places");
   } catch (error) {
     return next(new HttpError("Request failed, try again later.", 500));
   }
 
-  if (!foundPlaces || foundPlaces.length === 0) {
+  if (!foundPlaces || foundPlaces.places.length === 0) {
     return next(
       new HttpError("Could not find places for the provided ID.", 404)
     );
   }
-  const response = foundPlaces.map((place) =>
+  const response = foundPlaces.places.map((place) =>
     place.toObject({ getters: true })
   );
 
