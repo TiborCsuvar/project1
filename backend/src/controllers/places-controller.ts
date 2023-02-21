@@ -23,7 +23,7 @@ export const getPlaceById = async (req, res, next) => {
   }
   const response = foundPlace.toObject({ getters: true });
 
-  res.status(200).json(response);
+  res.status(200).json({ places: response });
 };
 
 export const getPlacesByUserId = async (req, res, next) => {
@@ -45,7 +45,7 @@ export const getPlacesByUserId = async (req, res, next) => {
     place.toObject({ getters: true })
   );
 
-  res.status(200).json(response);
+  res.status(200).json({ places: response });
 };
 
 export const createPlace = async (req, res, next) => {

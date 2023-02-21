@@ -1,35 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import PlaceList from "../components/PlaceList";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
-const DUMMY_PLACES = [{
-  id: 'p1',
-  title: 'Halászbástya',
-  description: 'A fortress from the XIX. century.',
-  imageUrl: '/halaszbastya.jfif',
-  address: 'Budapest, Szentháromság tér, 1014',
-  creator: '1',
-  location: {
-    lat: 47.5021827,
-    lng: 19.0325925
-  }
-},
-{
-  id: 'p2',
-  title: 'Halászbástya',
-  description: 'A fortress from the XIX. century.',
-  imageUrl: '/halaszbastya.jfif',
-  address: 'Budapest, Szentháromság tér, 1014',
-  creator: '2',
-  location: {
-    lat: 47.5021827,
-    lng: 19.0325925
-  }
-}];
 
 export default function UserPlaces() {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [loadedPlaces, setLoadedPlaces] = useState();
+
   const userId = useParams().userId;
-  const userPlaces = DUMMY_PLACES.filter(place => place.creator === userId);
-  return <PlaceList items={userPlaces} />;
+
+  useEffect(() => {
+
+    const fetchPlaces = async () => {
+      try {
+        const responseData = await sendRequest(`http://localhost:3005/api/places/user/${userId}`);
+        setLoadedPlaces(responseData.places);
+      } catch (err) { }
+
+    }
+    fetchPlaces();
+  }, [sendRequest, userId]);
+
+  return (
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && <div className="center">
+        <LoadingSpinner on />
+      </div>}
+      {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+    </React.Fragment>
+  );
 }
