@@ -62,7 +62,7 @@ export default function Auth() {
     if (isLoginMode) {
 
       try {
-        await sendRequest("http://localhost:3005/api/users/login",
+        const responseData = await sendRequest("http://localhost:3005/api/users/login",
           "POST",
           {
             "Content-Type": "application/json"
@@ -74,15 +74,13 @@ export default function Auth() {
           })
         );
 
-        auth.login();
-      } catch (error) {
-
-      }
+        auth.login(responseData.user.id);
+      } catch (error) { }
 
     } else {
       try {
 
-        await sendRequest("http://localhost:3005/api/users/signup",
+        const responseData = await sendRequest("http://localhost:3005/api/users/signup",
           "POST",
           {
             "Content-Type": "application/json"
@@ -94,10 +92,8 @@ export default function Auth() {
           })
         );
 
-        auth.login();
-      } catch (error) {
-
-      }
+        auth.login(responseData.user.id);
+      } catch (error) { }
     }
   };
 

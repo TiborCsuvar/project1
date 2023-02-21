@@ -31,7 +31,10 @@ export const loginUser = async (req, res, next) => {
     return next(new HttpError("Invalid credentials.", 401));
   }
 
-  res.json({ message: "Logged in." });
+  res.json({
+    message: "Logged in.",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 export const signupUser = async (req, res, next) => {
@@ -69,5 +72,5 @@ export const signupUser = async (req, res, next) => {
   }
 
   const response = createdUser.toObject({ getters: true });
-  res.status(201).json(response);
+  res.status(201).json({ user: response });
 };
