@@ -4,10 +4,12 @@ import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 import "./PlaceForm.css";
 
 export default function NewPlace() {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -29,7 +31,19 @@ export default function NewPlace() {
 
   const placeSubmitHandler = event => {
     event.preventDefault();
-    console.log(formState.inputs);
+
+    sendRequest("http://localhost:3005/api/places",
+      "POST",
+      {
+        "Content-Type": "application/json"
+      },
+      JSON.stringify({
+        title: formState.inputs.title.value,
+        description: formState.inputs.description.value,
+        address: formState.inputs.address.value,
+
+      })
+    );
   };
 
   return (

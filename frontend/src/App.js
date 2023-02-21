@@ -7,7 +7,7 @@ import NewPlace from './places/pages/NewPlace';
 import UpdatePlace from './places/pages/UpdatePlace';
 import Auth from './user/pages/Auth';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
-import { AuthContect } from './shared/context/auth-contect';
+import { AuthContext } from './shared/context/auth-context';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,7 +44,7 @@ export default function App() {
   }
 
   return (
-    <AuthContect.Provider value={{
+    <AuthContext.Provider value={{
       isLoggedIn: isLoggedIn,
       login: login,
       logout: logout
@@ -57,6 +57,6 @@ export default function App() {
           </Routes>
         </main>
       </Router >
-    </AuthContect.Provider>
+    </AuthContext.Provider>
   );
 }

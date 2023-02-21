@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { AuthContect } from '../../context/auth-contect';
+import { AuthContext } from '../../context/auth-context';
 import Button from '../FormElements/Button';
 
 import './NavLinks.css';
 
 export default function NavLinks() {
-  const auth = useContext(AuthContect);
+  const auth = useContext(AuthContext);
   return <ul className="nav-links">
     <li>
       <NavLink to="/" exact="true">All Users</NavLink>
