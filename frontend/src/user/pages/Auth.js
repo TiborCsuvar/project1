@@ -38,7 +38,8 @@ export default function Auth() {
       setFormData(
         {
           ...formState.inputs,
-          name: undefined
+          name: undefined,
+          image: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -49,8 +50,13 @@ export default function Auth() {
           name: {
             value: '',
             isValid: false
+          },
+          image: {
+            value: null,
+            isValid: false
           }
         },
+
         false
       );
     }
@@ -59,6 +65,8 @@ export default function Auth() {
 
   const authSubmitHandler = async event => {
     event.preventDefault();
+
+    console.log(formState.inputs);
 
     if (isLoginMode) {
 
@@ -116,7 +124,13 @@ export default function Auth() {
             onInput={inputHandler}
           />}
 
-          {!isLoginMode && <ImageUpload center id="image" />}
+          {!isLoginMode &&
+            (<ImageUpload
+              center
+              id="image"
+              onInput={inputHandler}
+            />
+            )}
 
           <Input
             element="input"
