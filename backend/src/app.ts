@@ -2,18 +2,21 @@ import express from "express";
 import config from "../config";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import fs from "fs";
+import path from "path";
 
 import placesRoutes from "./routes/places-routes";
 import usersRoutes from "./routes/users-routes";
 import HttpError from "./models/http-error";
 
+const PORT = config.port || 8081;
+const DATABASE_USERNAME = config.database_username;
+const DATABASE_PASSWORD = config.database_password;
 const app = express();
 
 app.use(bodyParser.json());
 
-const PORT = config.port || 8081;
-const DATABASE_USERNAME = config.database_username;
-const DATABASE_PASSWORD = config.database_password;
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -37,6 +40,12 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
+
   if (res.headerSent) {
     return next(error);
   }

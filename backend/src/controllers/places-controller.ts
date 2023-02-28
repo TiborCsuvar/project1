@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import fs from "fs";
 
 import HttpError from "../models/http-error";
 import getCoordinatesForAddress from "../util/location";
@@ -69,7 +70,7 @@ export const createPlace = async (req, res, next) => {
     description: description,
     address: address,
     location: coordinates,
-    image: "https://en.wikipedia.org/wiki/File:June_odd-eyed-cat.jpg",
+    image: "./placeholder.jpg", //req.file.path,
     creator: creator,
   });
 
@@ -144,6 +145,8 @@ export const deletePlaceById = async (req, res, next) => {
     return next(new HttpError("Could not find place for provided ID", 404));
   }
 
+  const imagePath = placeToDelete.image;
+
   try {
     const deletePlaceSession = await mongoose.startSession();
     deletePlaceSession.startTransaction();
@@ -154,6 +157,10 @@ export const deletePlaceById = async (req, res, next) => {
   } catch (error) {
     return next(new HttpError("Could not delete place", 500));
   }
+
+  fs.unlink(imagePath, (err) => {
+    // console.log(err);
+  });
 
   res.status(200).json({ message: `Deleted place with id: ${placeId}` });
 };

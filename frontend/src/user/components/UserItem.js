@@ -6,20 +6,20 @@ import Card from "../../shared/components/UIElements/Card";
 
 import './UserItem.css';
 
-export default function UserItem(user) {
+export default function UserItem(props) {
   return (
     <li className="user-item">
       <Card className="user-item-content">
-        <Link to={`/${user.id}/places`}>
+        <Link to={`/${props.id}/places`}>
           <div className="user-item-image">
             <Avatar
-              image={user.image}
-              alt={user.alt}
+              image={props.image}
+              alt={props.alt}
             />
           </div>
           <div className="user-item-info">
-            <h2>{user.name}</h2>
-            <h3>{user.placeCount} {user.placeCount === 1 ? 'Place' : 'Places'}</h3>
+            <h2>{props.name}</h2>
+            <h3>{props.placeCount} {props.placeCount === 1 ? 'Place' : 'Places'}</h3>
           </div>
         </Link>
       </Card>

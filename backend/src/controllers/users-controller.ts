@@ -61,7 +61,7 @@ export const signupUser = async (req, res, next) => {
     name: name,
     email: email,
     password: password,
-    image: "https://en.wikipedia.org/wiki/File:June_odd-eyed-cat.jpg",
+    image: "./placeholder.jpg", //req.file.path,
     places: [],
   });
 
