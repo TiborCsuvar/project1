@@ -71,13 +71,13 @@ export default function UpdatePlace() {
     try {
       await sendRequest(`http://localhost:3005/api/places/${placeId}`,
         "PATCH",
-        {
-          "Content-Type": "application/json"
-        },
         JSON.stringify({
           title: formState.inputs.title.value,
           description: formState.inputs.description.value
-        })
+        }),
+        {
+          "Content-Type": "application/json"
+        }
       );
       navigate(`/${auth.userId}/places`);
     } catch (err) { }

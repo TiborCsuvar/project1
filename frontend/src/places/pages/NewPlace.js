@@ -41,15 +41,15 @@ export default function NewPlace() {
     try {
       await sendRequest("http://localhost:3005/api/places",
         "POST",
-        {
-          "Content-Type": "application/json"
-        },
         JSON.stringify({
           title: formState.inputs.title.value,
           description: formState.inputs.description.value,
           address: formState.inputs.address.value,
           creator: auth.userId
-        })
+        }),
+        {
+          "Content-Type": "application/json"
+        },
       );
       navigate("/");
     } catch (err) { }

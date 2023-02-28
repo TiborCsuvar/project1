@@ -1,6 +1,7 @@
 import express from "express";
 import config from "../config";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
 
 import placesRoutes from "./routes/places-routes";
 import usersRoutes from "./routes/users-routes";
@@ -8,7 +9,7 @@ import HttpError from "./models/http-error";
 
 const app = express();
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 const PORT = config.port || 8081;
 const DATABASE_USERNAME = config.database_username;
@@ -20,7 +21,10 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "OPTION, GET, POST, PATCH, DELETE"
+  );
 
   next();
 });

@@ -7,7 +7,7 @@ export const useHttpClient = () => {
   // const activeHttpRequest = useRef([]);
 
   const sendRequest = useCallback(
-    async (url, method = "GET", headers = {}, body = null) => {
+    async (url, method = "GET", body = null, headers = {}) => {
       setIsLoading(true);
       //  const httpAbortController = new AbortController();
       //  activeHttpRequest.current.push(httpAbortController);
@@ -15,8 +15,8 @@ export const useHttpClient = () => {
       try {
         const response = await fetch(url, {
           method: method,
-          headers: headers,
           body: body,
+          headers: headers,
           //  signal: httpAbortController.signal
         });
         const responseData = await response.json();

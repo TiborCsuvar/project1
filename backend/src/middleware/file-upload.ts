@@ -8,7 +8,7 @@ const MIME_TYPE_MAP = {
 };
 
 export const fileUpload = multer({
-  limit: 2000000,
+  limits: 500000,
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, "uploads/images");
@@ -21,7 +21,6 @@ export const fileUpload = multer({
   fileFilter: (req, file, cb) => {
     const isValid = !!MIME_TYPE_MAP[file.mimetype];
     let error = isValid ? null : new Error("Invalid mime type!");
-
     cb(error, isValid);
   },
 });
