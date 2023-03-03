@@ -1,8 +1,13 @@
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+import config from "../../config";
 import HttpError from "../models/http-error";
 import { User } from "../models/user-schema";
+
+const TOKEN_KEY = config.token_key;
+const TOKEN_EXPIRICY_DATE = config.token_expiricy_date;
 
 export const getUsers = async (req, res, next) => {
   let allUsers;
@@ -48,9 +53,21 @@ export const loginUser = async (req, res, next) => {
     );
   }
 
+  let token;
+  try {
+    token = await jwt.sign(
+      { userId: existingUser.id, email: existingUser.email },
+      TOKEN_KEY,
+      { expiresIn: TOKEN_EXPIRICY_DATE }
+    );
+  } catch (error) {
+    return next(new HttpError("Log in failed, try again later.", 500));
+  }
+
   res.json({
-    message: "Logged in.",
-    user: existingUser.toObject({ getters: true }),
+    userId: existingUser.id,
+    email: existingUser.email,
+    token: token,
   });
 };
 
@@ -93,9 +110,23 @@ export const signupUser = async (req, res, next) => {
   try {
     await createdUser.save();
   } catch (error) {
-    return next(new HttpError("Signing up failed.", 500));
+    return next(new HttpError("Signing up failed, try again later.", 500));
   }
 
-  const response = createdUser.toObject({ getters: true });
-  res.status(201).json({ user: response });
+  let token;
+  try {
+    token = await jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
+      TOKEN_KEY,
+      { expiresIn: TOKEN_EXPIRICY_DATE }
+    );
+  } catch (error) {
+    return next(new HttpError("Signing up failed, try again later.", 500));
+  }
+
+  res.status(201).json({
+    userId: createdUser.id,
+    email: createdUser.email,
+    token: token,
+  });
 };
