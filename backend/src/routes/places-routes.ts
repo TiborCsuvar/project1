@@ -2,7 +2,7 @@ import express from "express";
 import { check } from "express-validator";
 
 import { fileUpload } from "../middleware/file-upload";
-
+import CheckAuth from "../middleware/check-auth";
 import {
   getPlaceById,
   getPlacesByUserId,
@@ -16,6 +16,8 @@ const router = express.Router();
 export default router.get("/user/:uId", getPlacesByUserId);
 
 router.get("/:pId", getPlaceById);
+
+router.use(CheckAuth);
 
 router.post(
   "/",
