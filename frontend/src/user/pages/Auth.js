@@ -83,7 +83,7 @@ export default function Auth() {
           }
         );
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (error) { }
 
     } else {
@@ -100,7 +100,7 @@ export default function Auth() {
           formData
         );
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (error) { }
     }
   };

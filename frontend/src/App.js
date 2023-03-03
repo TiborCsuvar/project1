@@ -10,22 +10,22 @@ import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const login = useCallback((userId) => {
-    setIsLoggedIn(true);
+  const login = useCallback((userId, token) => {
+    setToken(token);
     setUserId(userId);
   }, []);
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken(null);
     setUserId(null);
   }, []);
 
   let routes;
 
-  if (isLoggedIn) {
+  if (setToken) {
     routes = (
       <React.Fragment>
         <Route path='/' exact="true" element={< Users />} />
@@ -48,7 +48,8 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{
-      isLoggedIn: isLoggedIn,
+      isLoggedIn: !!token,
+      token: token,
       userId: userId,
       login: login,
       logout: logout

@@ -53,7 +53,10 @@ export default function NewPlace() {
 
       await sendRequest("http://localhost:3005/api/places",
         "POST",
-        formData
+        formData,
+        {
+          Authorization: "Bearer " + auth.token
+        }
       );
       navigate("/");
     } catch (err) { }

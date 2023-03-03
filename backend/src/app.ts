@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "OPTION, GET, POST, PATCH, DELETE"
+    "OPTIONS, GET, POST, PATCH, DELETE"
   );
 
   next();
