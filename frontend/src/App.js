@@ -25,7 +25,7 @@ export default function App() {
 
   let routes;
 
-  if (setToken) {
+  if (token) {
     routes = (
       <React.Fragment>
         <Route path='/' exact="true" element={< Users />} />
