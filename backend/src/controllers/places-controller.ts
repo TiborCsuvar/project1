@@ -116,6 +116,10 @@ export const updatePlaceById = async (req, res, next) => {
     return next(new HttpError("Could not update.", 500));
   }
 
+  if (updatedPlace.creator.toString() !== req.userData.userId) {
+    return next(new HttpError("Your are not allowed to edit this place.", 401));
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
 
